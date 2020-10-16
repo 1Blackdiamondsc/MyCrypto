@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { getWalletConfig, ROUTE_PATHS } from '@config';
-import { useAnalytics } from '@hooks';
-import { ANALYTICS_CATEGORIES } from '@services';
 import { BREAK_POINTS, COLORS } from '@theme';
 import translate, { translateRaw } from '@translations';
 import { IStory, WalletId } from '@types';
@@ -90,16 +88,6 @@ interface Props {
 }
 
 export const WalletList = ({ wallets, onSelect, showHeader, calculateMargin }: Props) => {
-  const trackSelectWallet = useAnalytics({
-    category: ANALYTICS_CATEGORIES.ADD_ACCOUNT
-  });
-
-  const selectWallet = (name: WalletId) => {
-    trackSelectWallet({
-      actionName: `${name} clicked`
-    });
-    onSelect(name);
-  };
   return (
     <div>
       {showHeader && (
@@ -121,7 +109,7 @@ export const WalletList = ({ wallets, onSelect, showHeader, calculateMargin }: P
                 icon={walletInfo.icon}
                 description={translateRaw(walletInfo.description)}
                 margin={calculateMargin && calculateMargin(index)}
-                onClick={() => selectWallet(wallet.name)}
+                onClick={() => onSelect(wallet.name)}
                 isDisabled={wallet.isDisabled}
               />
             );

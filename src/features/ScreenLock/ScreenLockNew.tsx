@@ -6,8 +6,6 @@ import styled from 'styled-components';
 
 import mainImage from '@assets/images/icn-create-pw.svg';
 import { ExtendedContentPanel, InputField } from '@components';
-import { useAnalytics } from '@hooks';
-import { ANALYTICS_CATEGORIES } from '@services';
 import translate, { translateRaw } from '@translations';
 
 import { ScreenLockContext } from './ScreenLockProvider';
@@ -45,9 +43,6 @@ const ScreenLockNew: FC<RouteComponentProps> = ({ history }) => {
     password2: '',
     password1Error: '',
     password2Error: ''
-  });
-  const trackScreenLock = useAnalytics({
-    category: ANALYTICS_CATEGORIES.SCREEN_LOCK
   });
 
   const validateForm = useCallback(() => {
@@ -103,21 +98,14 @@ const ScreenLockNew: FC<RouteComponentProps> = ({ history }) => {
         password1 === password2
       ) {
         encryptWithPassword(password1, false);
-
-        trackScreenLock({
-          actionName: 'User created a screenlock'
-        });
       }
     },
-    [state, setState, trackScreenLock]
+    [state, setState]
   );
 
   const onBack = useCallback(() => {
-    trackScreenLock({
-      actionName: 'Back button clicked'
-    });
     history.goBack();
-  }, [history, trackScreenLock]);
+  }, [history]);
 
   return (
     <ScreenLockContext.Consumer>
@@ -156,16 +144,7 @@ const ScreenLockNew: FC<RouteComponentProps> = ({ history }) => {
             <BottomActions>
               <div>
                 {translate('SCREEN_LOCK_LOCKED_RECOMMEND_LOCK')}{' '}
-                <Link
-                  onClick={() =>
-                    trackScreenLock({
-                      actionName: 'Why do we recommend link clicked'
-                    })
-                  }
-                  to="/dashboard"
-                >
-                  {translate('SCREEN_LOCK_LOCKED_LEARN_MORE')}
-                </Link>
+                <Link to="/dashboard">{translate('SCREEN_LOCK_LOCKED_LEARN_MORE')}</Link>
               </div>
             </BottomActions>
           </ContentWrapper>
